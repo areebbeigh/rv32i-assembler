@@ -1,7 +1,7 @@
 from ply import lex
 
-from . import instructions
-from .iterator import LexerIterator
+from lexer import instructions
+from lexer.iterator import LexerIterator
 
 
 class Lexer:

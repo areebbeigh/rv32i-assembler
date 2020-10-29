@@ -1,5 +1,6 @@
 from ply import yacc
 
+from helpers import imm_converter
 from lexer import instructions
 
 
@@ -57,7 +58,9 @@ class Parser:
         assert instr in instructions.TYPE_UI or instr in instructions.TYPE_UJ
 
         if instr in instructions.TYPE_UI:
-            pass
+            p[0] = {
+
+            }
         else:  # Type UJ
             pass
 
