@@ -5,7 +5,7 @@ from lexer import instructions
 
 class Parser:
     def __init__(self, lexer):
-        self.parser = yacc.yacc(module=self, lexer=lexer)
+        self.parser = yacc.yacc(module=self)
 
     # Rules
     # https://ply.readthedocs.io/en/latest/ply.html#ast-construction
@@ -31,6 +31,7 @@ class Parser:
         'stmt : INSTR register COMMA register COMMA register NEWLINE'
         assert instructions.is_instr(p[1])
         p[0] = {
+            'type': 'r',
             'instr': p[1],
             'rd': p[2],
             'rs1': p[4],
@@ -71,12 +72,12 @@ class Parser:
     def p_register(self, p):
         'register : REGISTER'
         r = int(p[1][1:])
-        assert r >= 0 and <= 31, f'Invalid register {p[1]}'
+        assert r >= 0 and r <= 31, f'Invalid register {p[1]}'
         p[0] = r
 
     def p_stmt_newline(self, p):
-    'stmt : NEWLINE'
-    p[0] = None
+        'stmt : NEWLINE'
+        p[0] = None
 
     def parse_line(self, line):
         return self.parser.parse(line)
