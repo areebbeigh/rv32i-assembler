@@ -16,8 +16,6 @@ class Lexer:
     t_COMMA = r','
     t_COLON = r':'
     t_IMMEDIATE = r'[-+]?\d+'
-    # Ignore white spaces
-    t_ignore = ' \t\r'
 
     # Register should appear before INSTR and LABEL since
     # x1...32 are valid labels too.
@@ -50,11 +48,11 @@ class Lexer:
         raise Exception(
             f'Illegal character: {t.value} in line {t.lexer.lineno}')
 
-    def input_string(self, str):
-        self.lexer.input(str)
+    # Ignore white spaces
+    t_ignore = ' \t\r'
 
-    def input(self, stream):
-        self.input_string(stream.read())
+    def input(self, str):
+        self.lexer.input(str)
 
     def __iter__(self):
         return LexerIterator(self)
