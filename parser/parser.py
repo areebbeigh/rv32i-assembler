@@ -45,7 +45,6 @@ class Parser:
     def p_stmt_type_i_sb(self, p):
         'stmt : INSTR register COMMA register COMMA IMMEDIATE NEWLINE'
         instr = p[1]
-        assert instructions.is_instr(instr)
         assert instr in instructions.TYPE_I or instr in instructions.TYPE_SB
 
         res = {
@@ -70,7 +69,6 @@ class Parser:
     def p_stmt_type_ui_uj(self, p):
         'stmt : INSTR register COMMA IMMEDIATE NEWLINE'
         instr = p[1]
-        assert instructions.is_instr(instr)
         assert instr in instructions.TYPE_UI or instr in instructions.TYPE_UJ
 
         res = {
@@ -89,13 +87,30 @@ class Parser:
             })
         p[0] = res
 
-    # def p_stmt_type_uj_label(self, p):
-    #     'stmt : INSTR register COMMA LABEL NEWLINE'
-    #     pass
+    def p_stmt_type_uj_label(self, p):
+        'stmt : INSTR register COMMA LABEL NEWLINE'
+        instr = p[0]
+        assert instr in instructions.TYPE_UJ
+        p[0] = {
+            'type': 'uj',
+            'instr': instr,
+            'lineno': p.lineno(1),
+            'label': p[4],
+            'rd': p[2],
+        }
 
-    # def p_stmt_type_sb_label(self, p):
-    #     'stmt : INSTR register COMMA register COMMA LABEL NEWLINE'
-    #     pass
+    def p_stmt_type_sb_label(self, p):
+        'stmt : INSTR register COMMA register COMMA LABEL NEWLINE'
+        instr = p[0]
+        assert instr in instructions.TYPE_SB
+        p[0] = {
+            'type': 'sb',
+            'instr': instr,
+            'lineno': p.lineno(1),
+            'label': p[6],
+            'rs1': p[2],
+            'rs2': p[4],
+        }
 
     def p_register(self, p):
         'register : REGISTER'
@@ -114,4 +129,4 @@ class Parser:
         raise Exception(f'Syntax error: {lineno} {p}')
 
     def parse_line(self, line):
-        return self.parser.parse(line, debug=True, lexer=self.lexer.lexer)
+        return self.parser.parse(line, debug=False, lexer=self.lexer.lexer)

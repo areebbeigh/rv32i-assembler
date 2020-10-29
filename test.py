@@ -2,9 +2,10 @@ from lexer.lexer import Lexer
 
 l = Lexer()
 code = '''
-addi x1, x2, 1
-addi x2, x3, 2
-add x2, x5, x2
+.main:
+    addi x1, x0, 5
+    addi x2, x0, 4
+    beq x1,x2, -8
 '''
 # code = '''addi x1, x2, 1\n'''
 # l.input_string(code)
@@ -27,4 +28,5 @@ from parser.parser import Parser
 
 p = Parser(l)
 for ln in code.split('\n'):
-    print(p.parse_line(ln + '\n'))
+    if ln:
+        print(p.parse_line(ln + '\n'))
