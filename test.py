@@ -10,3 +10,11 @@ l.input_string(code)
 
 for t in l:
     print(t)
+
+from parser import imm_converter
+
+print(imm_converter.imm_type_i(5))
+print(imm_converter.imm_type_i(-5))
+
+print(imm_converter.imm_type_ui(5))
+print(imm_converter.imm_type_ui(-5))
