@@ -13,8 +13,11 @@ for t in l:
 
 from parser import imm_converter
 
-print(imm_converter.imm_type_i(5))
-print(imm_converter.imm_type_i(-5))
+print(imm_converter.imm_12(5))
+print(imm_converter.imm_12(-5))
 
-print(imm_converter.imm_type_ui(5))
-print(imm_converter.imm_type_ui(-5))
+print(imm_converter.imm_13(5))
+print(imm_converter.imm_13(-5))
+
+print(imm_converter.imm_20(5))
+print(imm_converter.imm_20(-5))

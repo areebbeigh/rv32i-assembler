@@ -11,7 +11,8 @@ def twos_compliment(n, width):
     return f'{n:0{width}b}'
 
 
-def imm_type_i(n):
+# TODO: Refactor these into single method.
+def imm_12(n):
     'signed 12 bit immediate'
     MAX = 0b011111111111
     MIN = -0b100000000000
@@ -21,11 +22,17 @@ def imm_type_i(n):
     return res
 
 
-def imm_type_sb(n):
-    pass
+def imm_13(n):
+    'signed 13 bit immediate'
+    MAX = 0b0111111111110
+    MIN = -0b1000000000000
+    assert n >= MIN and n <= MAX, f"{n} doesn't fit signed 13bit"
+    res = twos_compliment(n, 13)
+    assert len(res) == 13
+    return res
 
 
-def imm_type_ui(n):
+def imm_20(n):
     'signed 20 bit immediate'
     MAX = 0b01111111111111111111
     MIN = -0b10000000000000000000
@@ -33,7 +40,3 @@ def imm_type_ui(n):
     res = twos_compliment(n, 20)
     assert len(res) == 20
     return res
-
-
-def imm_type_uj(n):
-    pass
