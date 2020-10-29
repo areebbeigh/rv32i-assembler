@@ -22,14 +22,16 @@ def imm_12(n):
     return res
 
 
-def imm_13(n):
-    'signed 13 bit immediate'
+def imm_13_effective(n):
+    'signed even 12 bit immediate'
+    # Last bit is ignored and always zero.
     MAX = 0b0111111111110
     MIN = -0b1000000000000
     assert n >= MIN and n <= MAX, f"{n} doesn't fit signed 13bit"
     res = twos_compliment(n, 13)
     assert len(res) == 13
-    return res
+    assert res[-1] == '0', f'{n} is not a multiple a multiple of 2.'
+    return res[:-1]
 
 
 def imm_20(n):
@@ -39,4 +41,15 @@ def imm_20(n):
     assert n >= MIN and n <= MAX, f"{n} doesn't fit signed 20bit"
     res = twos_compliment(n, 20)
     assert len(res) == 20
+    return res
+
+
+def imm_21_effective(n):
+    'signed even 20 bit immediate'
+    MAX = 0b011111111111111111110
+    MIN = -0b100000000000000000000
+    assert n >= MIN and n <= MAX, f"{n} doesn't fit signed 20bit"
+    res = twos_compliment(n, 21)
+    assert len(res) == 21
+    assert res[-1] == '0', f'{n} is not a multiple a multiple of 2.'
     return res

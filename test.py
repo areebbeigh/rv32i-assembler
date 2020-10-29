@@ -16,8 +16,8 @@ from helpers import imm_converter
 print(imm_converter.imm_12(5))
 print(imm_converter.imm_12(-5))
 
-print(imm_converter.imm_13(5))
-print(imm_converter.imm_13(-5))
+print(imm_converter.imm_13_effective(6))
+print(imm_converter.imm_13_effective(-6))
 
 print(imm_converter.imm_20(5))
 print(imm_converter.imm_20(-5))

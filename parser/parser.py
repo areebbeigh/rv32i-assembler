@@ -33,11 +33,11 @@ class Parser:
         assert instructions.is_instr(p[1])
         p[0] = {
             'type': 'r',
+            'lineno': p.lineno(1),
             'instr': p[1],
             'rd': p[2],
             'rs1': p[4],
             'rs2': p[6],
-            'lineno': p.lineno(1),
         }
 
     def p_stmt_type_i_sb(self, p):
@@ -46,10 +46,24 @@ class Parser:
         assert instructions.is_instr(instr)
         assert instr in instructions.TYPE_I or instr in instructions.TYPE_SB
 
+        res = {
+            'instr': instr,
+            'lineno': p.lineno(1),
+            'rd': p[2],
+            'rs1': p[4],
+        }
+
         if instr in instructions.TYPE_I:
-            pass
+            res.update({
+                'type': 'i',
+                'imm': imm_converter.imm_12(p[6]),
+            })
         else:  # Type SB
-            pass
+            res.update({
+                'type': 'sb',
+                'imm': imm_converter.imm_13_effective(p[6]),
+            })
+        p[0] = res
 
     def p_stmt_type_ui_uj(self, p):
         'stmt : INSTR register COMMA IMMEDIATE NEWLINE'
@@ -57,12 +71,21 @@ class Parser:
         assert instructions.is_instr(instr)
         assert instr in instructions.TYPE_UI or instr in instructions.TYPE_UJ
 
-        if instr in instructions.TYPE_UI:
-            p[0] = {
+        res = {
+            'instr': instr,
+            'lineno': p.lineno(1),
+            'rd': p[2],
+        }
 
-            }
+        if instr in instructions.TYPE_UI:
+            res.update({
+                'imm': imm_converter.imm_20(p[4])
+            })
         else:  # Type UJ
-            pass
+            res.update({
+                'imm': imm_converter.imm_21_effective(p[4])
+            })
+        p[0] = res
 
     def p_stmt_type_uj_label(self, p):
         'stmt : INSTR register COMMA LABEL NEWLINE'
