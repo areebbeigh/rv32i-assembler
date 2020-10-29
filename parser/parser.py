@@ -130,3 +130,41 @@ class Parser:
 
     def parse_line(self, line):
         return self.parser.parse(line, debug=False, lexer=self.lexer.lexer)
+
+    def _readlines(self, stream):
+        for ln in stream.readlines():
+            # Ensure line ends in \n for our parser to work
+            yield f'{ln.strip()}\n'
+
+    # First pass
+
+    def build_symbol_table(self, stream):
+        # Symbol table
+        self.symbol_table = {}
+        address = 0
+
+        for ln in self._readlines(stream):
+            node = self.parse_line(ln)
+
+            if node['tokens'] is None:
+                # Newline
+                continue
+
+            if node['type'] != 'label':
+                # 4 bytes per instruction
+                address += 4
+                continue
+
+            label = node['tokens']['label']
+            assert label not in self.symbol_table, f'Label {label} already exists'
+            self.symbol_table[label] = address
+
+    # Second pass
+
+    def generate_output(self, istream, ostream):
+        pass
+
+    def assemble(self, istream, ostream):
+        self.build_symbol_table(istream)
+        istream.seek(0)
+        self.generate_output(istream, ostream)
