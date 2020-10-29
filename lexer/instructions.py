@@ -148,3 +148,7 @@ FUNC7_ARITH = {
     OR: '0000000',
     AND: '0000000',
 }
+
+def get_func7(instr):
+    assert instr in TYPE_R, 'Instruction not implemented'
+    return FUNC7_ARITH[instr]

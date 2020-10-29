@@ -2,6 +2,7 @@ from ply import yacc
 
 from helpers import imm_converter
 from lexer import instructions
+from generator import CodeGenerator
 
 
 class Parser:
@@ -9,6 +10,7 @@ class Parser:
         self.lexer = lexer
         self.tokens = lexer.tokens
         self.parser = yacc.yacc(module=self)
+        self.generator = CodeGenerator()
 
     # Rules
     # https://ply.readthedocs.io/en/latest/ply.html#ast-construction
@@ -50,18 +52,20 @@ class Parser:
         res = {
             'instr': instr,
             'lineno': p.lineno(1),
-            'rd': p[2],
-            'rs1': p[4],
         }
 
         if instr in instructions.TYPE_I:
             res.update({
                 'type': 'i',
+                'rd': p[2],
+                'rs1': p[4],
                 'imm': imm_converter.imm_12(int(p[6])),
             })
         else:  # Type SB
             res.update({
                 'type': 'sb',
+                'rs1': p[2],
+                'rs2': p[4],
                 'imm': imm_converter.imm_13_effective(int(p[6])),
             })
         p[0] = res
@@ -149,7 +153,6 @@ class Parser:
             if node['tokens'] is None:
                 # Newline
                 continue
-
             if node['type'] != 'label':
                 # 4 bytes per instruction
                 address += 4
@@ -162,7 +165,25 @@ class Parser:
     # Second pass
 
     def generate_output(self, istream, ostream):
-        pass
+        address = 0
+        for ln in self._readlines(istream):
+            node = self.parse_line(ln)
+
+            if node['type'] == 'label':
+                continue
+            if node['tokens'] is None:
+                continue
+
+            # Jump instruction
+            if 'label' in node['tokens']:
+                label = node['tokens']['label']
+                assert label in self.symbol_table, f'Undefined label {label}'
+                # We need to get the offset from current address to this label's address
+                raise NotImplementedError()
+            else:
+                self.generator.write_binstr(node['tokens'], ostream)
+                ostream.write('\n')
+            address += 4
 
     def assemble(self, istream, ostream):
         self.build_symbol_table(istream)
