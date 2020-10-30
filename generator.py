@@ -65,10 +65,10 @@ class CodeGenerator:
         opcode = instructions.get_opcode(instr)
         rd = self.register_bin(node['rd'])
         imm = node['imm']
-        imm_19_12 = node[-19:-11]
-        imm_11 = node[-11]
-        imm_10_1 = node[-10:]
-        imm_20 = node[-20]
+        imm_19_12 = imm[-19:-11]
+        imm_11 = imm[-11]
+        imm_10_1 = imm[-10:]
+        imm_20 = imm[-20]
         return f'{imm_20}{imm_10_1}{imm_11}{imm_19_12}{rd}{opcode}'
 
     def write_binstr(self, node, stream):
@@ -84,9 +84,9 @@ class CodeGenerator:
         if node['instr'] == 'lui':
             res = self.instr_lui(node)
         if node['instr'] == 'auipc':
-            self.instr_auipc(node)
+            res = self.instr_auipc(node)
         if node['instr'] == 'jal':
-            self.instr_jal(node)
+            res = self.instr_jal(node)
 
         if res is None:
             raise NotImplementedError('Instruction not supported yet')

@@ -52,4 +52,5 @@ def imm_21_effective(n):
     res = twos_compliment(n, 21)
     assert len(res) == 21
     assert res[-1] == '0', f'{n} is not a multiple a multiple of 2.'
-    return res
+    # print(n, res)
+    return res[:-1]

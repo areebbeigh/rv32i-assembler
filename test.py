@@ -2,10 +2,19 @@ from lexer.lexer import Lexer
 
 l = Lexer()
 code = '''
-addi x1, x4, 5
-beq x5, x1, -8
-addi x2, x3, 4
-slli x1, x2, 2
+addi x5,x0, 6
+addi x1,x0,1
+addi x2,x0,0
+addi x3,x0,0
+addi x4,x0,1
+FOR:
+    add x3, x1, x2
+    add x2, x0, x1
+    add x1, x0, x3
+    addi x4, x4, 1
+    blt x4, x5, FOR
+HALT:
+    jal x31, HALT
 '''
 # code = '''addi x1, x2, 1\n'''
 # l.input_string(code)

@@ -93,7 +93,7 @@ class Parser:
 
     def p_stmt_type_uj_label(self, p):
         'stmt : INSTR register COMMA LABEL NEWLINE'
-        instr = p[0]
+        instr = p[1]
         assert instr in instructions.TYPE_UJ
         p[0] = {
             'type': 'uj',
@@ -105,7 +105,7 @@ class Parser:
 
     def p_stmt_type_sb_label(self, p):
         'stmt : INSTR register COMMA register COMMA LABEL NEWLINE'
-        instr = p[0]
+        instr = p[1]
         assert instr in instructions.TYPE_SB
         p[0] = {
             'type': 'sb',
@@ -139,6 +139,28 @@ class Parser:
         for ln in stream.readlines():
             # Ensure line ends in \n for our parser to work
             yield f'{ln.strip()}\n'
+
+    def _compute_label_offset(self, node, curr_addr, label):
+        label_addr = self.symbol_table[label]
+        offset = label_addr - curr_addr
+        res = {
+            'instr': node['instr'],
+            'lineno': node['lineno'],
+            'type': node['type'],
+        }
+
+        if node['instr'] in instructions.TYPE_UJ:
+            res.update({
+                'rd': node['rd'],
+                'imm': imm_converter.imm_21_effective(offset),
+            })
+        if node['instr'] in instructions.TYPE_SB:
+            res.update({
+                'rs1': node['rs1'],
+                'rs2': node['rs2'],
+                'imm': imm_converter.imm_13_effective(offset)
+            })
+        return res
 
     # First pass
 
@@ -179,10 +201,13 @@ class Parser:
                 label = node['tokens']['label']
                 assert label in self.symbol_table, f'Undefined label {label}'
                 # We need to get the offset from current address to this label's address
-                raise NotImplementedError()
+                # Converts an sb_label / uj_label type to sb_immediate / uj_immediate
+                write_node = self._compute_label_offset(node['tokens'], address, label)
             else:
-                self.generator.write_binstr(node['tokens'], ostream)
-                ostream.write('\n')
+                write_node = node['tokens']
+
+            self.generator.write_binstr(write_node, ostream)
+            ostream.write('\n')
             address += 4
 
     def assemble(self, istream, ostream):
