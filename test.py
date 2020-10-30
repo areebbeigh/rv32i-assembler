@@ -2,6 +2,7 @@ from lexer.lexer import Lexer
 
 l = Lexer()
 code = '''
+slt x1, x2, x3
 START:
 	addi x3,x0,2047
 	addi x30,x0,20

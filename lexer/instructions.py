@@ -6,8 +6,8 @@ SUB = 'sub'
 AND = 'and'
 OR = 'or'
 XOR = 'xor'
-# SLT = 'slt'
-# SLTU = 'sltu'
+SLT = 'slt'
+SLTU = 'sltu'
 SLL = 'sll'
 SRL = 'srl'
 SRA = 'sra'
@@ -17,7 +17,8 @@ ADDI = 'addi'
 ANDI = 'andi'
 ORI = 'ori'
 XORI = 'xori'
-# SLTI = 'slti'
+SLTI = 'slti'
+SLTIU = 'sltiu'
 SLLI = 'slli'
 SRLI = 'srli'
 SRAI = 'srai'
@@ -61,8 +62,8 @@ SHU = 'shu'
 INSTR_LOAD = (LB, LH, LW, LBU, LHU,)
 INSTR_STORE = (SB, SH, SW, SBU, SHU,)
 
-TYPE_R = (ADD, SUB, AND, OR, XOR, SLL, SRL, SRA, )
-TYPE_I = (ADDI, ANDI, ORI, XORI, SLLI, SRLI, SRAI, )
+TYPE_R = (ADD, SUB, AND, OR, XOR, SLL, SRL, SRA, SLT, SLTU )
+TYPE_I = (ADDI, ANDI, ORI, XORI, SLLI, SRLI, SRAI, SLTI, SLTIU )
 TYPE_SB = (BEQ, BNE, BLT, BGE, BLTU, BGEU, )
 TYPE_UI = (LUI, AUIPC, )
 TYPE_UJ = (JAL, )
@@ -112,8 +113,8 @@ FUNC3_ARITH = {
     ADD: '000',
     SUB: '000',
     SLL: '001',
-    # SLT: '010',
-    # SLTU: '011',
+    SLT: '010',
+    SLTU: '011',
     XOR: '100',
     SRL: '101',
     SRA: '101',
@@ -123,8 +124,8 @@ FUNC3_ARITH = {
 
 FUNC3_ARITHI = {
     ADDI: '000',
-    # SLTI: '010',
-    # SLTU: '011',
+    SLTI: '010',
+    SLTIU: '011',
     XORI: '100',
     ORI: '110',
     ANDI: '111',
@@ -178,8 +179,8 @@ FUNC7_ARITH = {
     ADD: '0000000',
     SUB: '0100000',
     SLL: '0000000',
-    # SLT: '0000000',
-    # SLTU: '0000000',
+    SLT: '0000000',
+    SLTU: '0000000',
     XOR: '0000000',
     SRL: '0000000',
     SRA: '0100000',
