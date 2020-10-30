@@ -6,6 +6,16 @@ An assembler for a small subset of rv32i instructions in Python. Uses [Python Le
 
 Originally implemented as an assignment in the Computer Organization and Architecture course at NIT Srinagar.
 
+- Number of instructions implemented: 24. (work in progress)
+
+## Pending
+
+- CLI
+- Error reporting
+- Load/Store instructions
+- JALR
+- SLT/SLTU/SLTI
+
 ## Resources
 
 - [COA Course, NIT Srinagar](https://www.youtube.com/playlist?list=PLUbapHgKkROlrwsMXiROFL6T2ftXxe_5C)
