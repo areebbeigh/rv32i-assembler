@@ -2,7 +2,6 @@ from lexer import instructions
 
 
 class CodeGenerator:
-
     def register_bin(self, r):
         r = int(r[1:])
         return f'{r:05b}'
@@ -43,6 +42,28 @@ class CodeGenerator:
         rs2 = self.register_bin(node['rs2'])
         return f'{imm_12}{imm_10_5}{rs2}{rs1}{func3}{imm_4_1}{imm_11}{opcode}'
 
+    def instr_load(self, node):
+        'imm[11:0] rs1 func3 rd opcode'
+        instr = node['instr']
+        opcode = instructions.get_opcode(instr)
+        imm = node['imm']
+        rd = self.register_bin(node['rd'])
+        rs1 = self.register_bin(node['rs1'])
+        func3 = instructions.get_func3(instr)
+        return f'{imm}{rs1}{func3}{rd}{opcode}'
+
+    def instr_store(self, node):
+        'imm[11:5] rs2 rs1 func3 imm[4:0] opcode'
+        instr = node['instr']
+        opcode = instructions.get_opcode(instr)
+        imm = node['imm']
+        imm_11_5 = imm[-12:-5]
+        imm_4_0 = imm[-5:]
+        rs2 = self.register_bin(node['rs2'])
+        rs1 = self.register_bin(node['rs1'])
+        func3 = instructions.get_func3(instr)
+        return f'{imm_11_5}{rs2}{rs1}{func3}{imm_4_0}{opcode}'
+
     def instr_lui(self, node):
         'imm[31:12] rd opcode'
         instr = node['instr']
@@ -81,6 +102,10 @@ class CodeGenerator:
             res = self.type_i(node)
         if node['type'] == 'sb':
             res = self.type_sb(node)
+        if node['instr'] in instructions.INSTR_LOAD:
+            res = self.instr_load(node)
+        if node['instr'] in instructions.INSTR_STORE:
+            res = self.instr_store(node)
         if node['instr'] == 'lui':
             res = self.instr_lui(node)
         if node['instr'] == 'auipc':

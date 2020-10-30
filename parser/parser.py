@@ -44,10 +44,12 @@ class Parser:
             'lineno': p.lineno(1),
         }
 
-    def p_stmt_type_i_sb(self, p):
+    def p_stmt_type_i_s_sb(self, p):
         'stmt : INSTR register COMMA register COMMA IMMEDIATE NEWLINE'
         instr = p[1]
-        assert instr in instructions.TYPE_I or instr in instructions.TYPE_SB
+        assert (instr in instructions.TYPE_I
+                or instr in instructions.TYPE_SB
+                or instr in instructions.TYPE_S)
 
         res = {
             'instr': instr,
@@ -61,13 +63,28 @@ class Parser:
                 'rs1': p[4],
                 'imm': imm_converter.imm_12(int(p[6])),
             })
-        else:  # Type SB
+        elif instr in instructions.TYPE_SB:  # Type SB
             res.update({
                 'type': 'sb',
                 'rs1': p[2],
                 'rs2': p[4],
                 'imm': imm_converter.imm_13_effective(int(p[6])),
             })
+        else:  # Type S
+            res.update({
+                'type': 's',
+                'imm': imm_converter.imm_12(int(p[6])),
+            })
+            if instr in instructions.INSTR_LOAD:
+                res.update({
+                    'rs1': p[4],
+                    'rd': p[2],
+                })
+            else: # Store
+                res.update({
+                    'rs1': p[2],
+                    'rs2': p[4],
+                })
         p[0] = res
 
     def p_stmt_type_ui_uj(self, p):
@@ -202,7 +219,8 @@ class Parser:
                 assert label in self.symbol_table, f'Undefined label {label}'
                 # We need to get the offset from current address to this label's address
                 # Converts an sb_label / uj_label type to sb_immediate / uj_immediate
-                write_node = self._compute_label_offset(node['tokens'], address, label)
+                write_node = self._compute_label_offset(
+                    node['tokens'], address, label)
             else:
                 write_node = node['tokens']
 

@@ -2,19 +2,27 @@ from lexer.lexer import Lexer
 
 l = Lexer()
 code = '''
-addi x5,x0, 6
-addi x1,x0,1
-addi x2,x0,0
-addi x3,x0,0
-addi x4,x0,1
-FOR:
-    add x3, x1, x2
-    add x2, x0, x1
-    add x1, x0, x3
-    addi x4, x4, 1
-    blt x4, x5, FOR
+START:
+	addi x3,x0,2047
+	addi x30,x0,20
+	jal  x31,PUSH
+	addi x3, x0, 1
+	jal x31,POP
 HALT:
-    jal x31, HALT
+	jal x31, HALT
+
+PUSH:
+	addi x30, x30, 4
+	sw x30, x3, 0
+
+POP:
+	lw x4, x30, 0
+	addi x30,x30,-4
+
+SWAP:
+	add x3,x0,x1
+	add x1,x0,x2
+	add x2,x0,x3
 '''
 # code = '''addi x1, x2, 1\n'''
 # l.input_string(code)
