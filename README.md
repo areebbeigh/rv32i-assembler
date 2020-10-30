@@ -8,13 +8,19 @@ Originally implemented as an assignment in the Computer Organization and Archite
 
 - Number of instructions implemented: 38. (work in progress)
 
+```bash
+pip install -r requirements.txt
+python3 assembler.py <input> -o <output>
+```
+
 ## Pending
 
-- CLI
+- ~~CLI~~ -> partially done.
 - Error reporting
 - ~~Load/Store instructions~~ -> implemented.
 - JALR
 - ~~SLT/SLTU/SLTI/SLTIU~~ -> implemented.
+- Comments
 
 ## Resources
 
