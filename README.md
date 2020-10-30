@@ -25,6 +25,8 @@ python3 assembler.py <input> -o <output>
 ## Resources
 
 - [COA Course, NIT Srinagar](https://www.youtube.com/playlist?list=PLUbapHgKkROlrwsMXiROFL6T2ftXxe_5C)
+- [RISCV-RV32I-Assembler](https://github.com/metastableB/RISCV-RV32I-Assembler)
+- [Assembler.py](https://github.com/dmjio/Assembler.py)
 - [RISC-V cheatsheet](https://metalcode.eu/2019-12-06-rv32i.html)
 - [RISC-V reference](https://github.com/jameslzhu/riscv-card/blob/master/riscv-card.pdf)
 - [PLY Docs](https://ply.readthedocs.io/en/latest/ply.html#)
