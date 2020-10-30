@@ -1,13 +1,21 @@
+import argparse
+
 from src.lexer.lexer import Lexer
 from src.parser.parser import Parser
-from io import StringIO
-import argparse
+
+
 def get_parser():
     lexer = Lexer()
     return Parser(lexer=lexer)
-ARGS_PARSER = argparse.ArgumentParser()
-ARGS_PARSER.add_argument("input", help = "source file")
-ARGS_PARSER.add_argument("-o","--output",default="a.txt",help="output file name")
-ARGS = ARGS_PARSER.parse_args()
-Parser = get_parser()
-Parser.assemble(open(ARGS.input,'r'),open(ARGS.output,'w+'))
+
+
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument("input", help="assembly source file")
+arg_parser.add_argument(
+    "-o", "--output", default="a.txt", help="output file name")
+args = arg_parser.parse_args()
+
+parser = get_parser()
+
+with open(args.input, 'r') as istream, open(args.output, 'w') as ostream:
+    parser.assemble(istream, ostream)
