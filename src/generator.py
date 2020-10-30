@@ -1,4 +1,4 @@
-from lexer import instructions
+from src.lexer import instructions
 
 
 class CodeGenerator:

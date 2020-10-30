@@ -1,6 +1,6 @@
-from lexer.lexer import Lexer
+from src.lexer.lexer import Lexer
+from src.parser.parser import Parser
 
-l = Lexer()
 code = '''
 slt x1, x2, x3
 START:
@@ -42,8 +42,7 @@ SWAP:
 # print(imm_converter.imm_20(5))
 # print(imm_converter.imm_20(-5))
 
-from parser.parser import Parser
-
+l = Lexer()
 p = Parser(l)
 # for ln in code.split('\n'):
 #     if ln:

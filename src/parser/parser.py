@@ -1,8 +1,8 @@
 from ply import yacc
 
-from helpers import imm_converter
-from lexer import instructions
-from generator import CodeGenerator
+from src.helpers import imm_converter
+from src.lexer import instructions
+from src.generator import CodeGenerator
 
 
 class Parser:
